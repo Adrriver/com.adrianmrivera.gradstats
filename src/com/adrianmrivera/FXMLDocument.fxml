@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.FXMLDocumentController">
+   <children>       
+      <MenuBar id="menuBar" fx:id="mainMenu" layoutY="-29.0" prefHeight="29.0" prefWidth="1204.0" useSystemMenuBar="true">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Pane id="mainPane" prefHeight="768.0" prefWidth="1204.0" stylesheets="@../../mainStyles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ToolBar fx:id="prToolbar" prefHeight="59.0" prefWidth="1204.0" />
+            <TabPane fx:id="tabPane" layoutX="8.0" layoutY="116.0" prefHeight="626.0" prefWidth="1187.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="dataTab" text="Data">
+                     <content>
+                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0" />
+                           
+                     </content>
+                  </Tab>
+                <Tab fx:id="varTab" text="Variable">
+                     <content>
+                        <ScrollPane fx:id="varPane" prefHeight="602.0" prefWidth="1166.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <ToolBar fx:id="secToolbar" layoutY="59.0" prefHeight="48.0" prefWidth="1204.0">
+              <items>
+                <Button mnemonicParsing="false" text="Button" />
+              </items>
+            </ToolBar>
+         </children>
+         </Pane>
+      <HBox id="botToolbar" fx:id="tTipHBox" layoutX="-7.0" layoutY="742.0" prefHeight="26.0" prefWidth="1211.0" />
+   </children>
 </AnchorPane>

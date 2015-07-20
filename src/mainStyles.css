@@ -1,0 +1,17 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 20, 2015, 8:35:34 AM
+    Author     : Adrian_and_Alanna
+*/
+
+#mainPane {
+    -fx-background-color: #fff1cb;
+}
+#botToolbar {
+    -fx-border: 3px solid #444;
+    
+}

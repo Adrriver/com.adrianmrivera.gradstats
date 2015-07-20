@@ -6,10 +6,14 @@
 package com.adrianmrivera;
 
 import javafx.application.Application;
+import javafx.embed.swing.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.*;
 
 /**
  *
@@ -23,8 +27,17 @@ public class GraduateStats extends Application {
         
         Scene scene = new Scene(root);
         
+        
         stage.setScene(scene);
+        stage.setTitle("Graduate Stats");
         stage.show();
+    
+         final SwingNode swingNode = new SwingNode();
+
+        createSwingContent(swingNode);
+       
+        
+        
     }
 
     /**
@@ -32,6 +45,12 @@ public class GraduateStats extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void createSwingContent(final SwingNode swingNode) {
+        
+                
+        
     }
     
 }
