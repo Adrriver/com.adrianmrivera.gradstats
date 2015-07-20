@@ -26,9 +26,10 @@ public class FXMLDocumentController implements Initializable {
     private ToolBar prToolbar;
     private ToolBar secToolbar;
     private TabPane tabPane;
-    private ScrollPane dataPane;
+    private ScrollPane dataPane = new ScrollPane();
     private ScrollPane varPane;
     private HBox tTipHBox;
+    
     
     
     @FXML

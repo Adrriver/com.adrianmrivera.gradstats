@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.FXMLDocumentController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8"  fx:controller="com.adrianmrivera.FXMLDocumentController">
    <children>       
       <MenuBar id="menuBar" fx:id="mainMenu" layoutY="-29.0" prefHeight="29.0" prefWidth="1204.0" useSystemMenuBar="true">
         <menus>
@@ -32,13 +32,21 @@
               <tabs>
                 <Tab fx:id="dataTab" text="Data">
                      <content>
-                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0" />
+                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0">
+                           <content>
+                               
+                           </content>
+                        </ScrollPane>
                            
                      </content>
                   </Tab>
                 <Tab fx:id="varTab" text="Variable">
                      <content>
-                        <ScrollPane fx:id="varPane" prefHeight="602.0" prefWidth="1166.0" />
+                        <ScrollPane fx:id="varPane" prefHeight="602.0" prefWidth="1166.0">
+                           <content>
+                             
+                           </content>
+                        </ScrollPane>
                      </content>
                   </Tab>
               </tabs>
