@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Adrian_and_Alanna
 */
 
-#mainPane {
+#mainPane, .column {
     -fx-background-color: #fff1cb;
 }
 #botToolbar {
