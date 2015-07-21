@@ -4,13 +4,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.ui.FXMLDocumentController">
    <children>       
       <MenuBar id="menuBar" fx:id="mainMenu" layoutY="-29.0" prefHeight="29.0" prefWidth="1204.0" useSystemMenuBar="true">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="new_file" mnemonicParsing="false" text="New File (Ctrl+N)" />
+                  <MenuItem fx:id="open" mnemonicParsing="false" text="Open" />
+              <MenuItem fx:id="file_Close" mnemonicParsing="false" text="Close File" />
+                  <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="save_as" mnemonicParsing="false" text="Save As..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -18,21 +22,35 @@
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="New File (Ctrl+N)" />
+                  <MenuItem mnemonicParsing="false" text="Open" />
+                  <MenuItem mnemonicParsing="false" text="Close File" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Save As..." />
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
-      <Pane id="mainPane" prefHeight="768.0" prefWidth="1204.0" stylesheets="@../../mainStyles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane id="mainPane" prefHeight="768.0" prefWidth="1204.0" stylesheets="@mainStyles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ToolBar fx:id="prToolbar" prefHeight="59.0" prefWidth="1204.0" />
             <TabPane fx:id="tabPane" layoutX="8.0" layoutY="116.0" prefHeight="626.0" prefWidth="1187.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="dataTab" text="Data">
                      <content>
-                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0">
+                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0" stylesheets="@mainStyles.css">
                            <content>
                               
                            </content>
