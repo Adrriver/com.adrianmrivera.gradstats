@@ -50,11 +50,9 @@
               <tabs>
                 <Tab fx:id="dataTab" text="Data">
                      <content>
-                        <ScrollPane fx:id="dataPane" prefHeight="506.0" prefWidth="1187.0" stylesheets="@mainStyles.css">
-                           <content>
-                              
-                           </content>
-                        </ScrollPane>
+                        <Pane fx:id="dataPane" prefHeight="580.0" prefWidth="1187.0" stylesheets="@mainStyles.css">
+                           
+                        </Pane>
                            
                      </content>
                   </Tab>

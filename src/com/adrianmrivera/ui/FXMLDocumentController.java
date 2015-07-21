@@ -34,7 +34,11 @@ public class FXMLDocumentController implements Initializable {
      @FXML
     private TabPane tabPane;
      @FXML
-    private ScrollPane dataPane;
+    private Pane dataPane;
+     @FXML
+    private Tab dataTab;
+     @FXML
+    private Tab varTab;
      @FXML
     private ScrollPane varPane;
      @FXML
@@ -49,10 +53,13 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
-    public ScrollPane getDataPane(){
-        return this.dataPane;
+    public Tab getDataTab(){
+        return this.dataTab;
     }
     
+    public Tab getVarTab(){
+        return this.varTab;
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

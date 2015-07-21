@@ -11,11 +11,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
-
+import java.util.*;
+import javafx.collections.ObservableList;
 /**
  *
  * @author Adrian_and_Alanna
@@ -23,11 +23,16 @@ import javafx.stage.*;
 public class GraduateStats extends Application {
 
     final StageStyle style;
-
+    private HashMap<Integer, TableColumn> columns;
+    private TableView<Double> table;
+    private boolean dataTabInit;
+            
+            
     GraduateStatsModel gradStatsModel = new GraduateStatsModel();
     
     public GraduateStats() {
         this.style = StageStyle.UNDECORATED;
+        columns = new HashMap(50);
     }
     
     @Override
@@ -37,8 +42,9 @@ public class GraduateStats extends Application {
         
         final FXMLDocumentController controller = fxmlLoader.getController();
         
-        // insert TableView into main ScrollPanes
-        controller.getDataPane().setContent(new ScrollPane(createTableView()));
+        // insert TableView into each of the two main Panes
+        controller.getDataTab().setContent(new ScrollPane(createTableView()));
+        controller.getVarTab().setContent(new ScrollPane(createTableView()));
         
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
@@ -59,12 +65,30 @@ public class GraduateStats extends Application {
     }
 
     Node createTableView(){
-        TableView table = new TableView(gradStatsModel.getDataValues());
-        TableColumn columnOne = new TableColumn("Column One");
-        columnOne.setPrefWidth(50);
+        table = new TableView<>();
+        ObservableList<Double> doubleList = gradStatsModel.getDataValues();     
+        table.setItems(doubleList);
+            
+        if(dataTabInit == false){
+            TableColumn rowCol = new TableColumn("n");
+            rowCol.setPrefWidth(50);  
+            rowCol.setEditable(false);
+            table.getColumns().add(rowCol);
+            dataTabInit = true;
+        }
         
+        for(int i = 0; i < 50; i++){
+            TableColumn<String,Double> col = new TableColumn<String,Double>();
+          
+            columns.put(i, col);
+            columns.get(i).setPrefWidth(75);  
+            columns.get(i).setEditable(true);
+            table.getColumns().add(columns.get(i));
+            
+        }
+        table.setMaxSize(1187.0, 500);
+        table.setMinSize(1187.0, 500);
         
-        table.getColumns().add(columnOne);
         return table;
     }
     
