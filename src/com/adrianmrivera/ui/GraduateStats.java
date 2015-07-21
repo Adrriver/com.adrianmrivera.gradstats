@@ -15,7 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.scene.control.cell.*;
 /**
  *
  * @author Adrian_and_Alanna
@@ -24,7 +26,7 @@ public class GraduateStats extends Application {
 
     final StageStyle style;
     private HashMap<Integer, TableColumn> columns;
-    private TableView<Double> table;
+    private TableView<DoubleValue> table;
     private boolean dataTabInit;
             
             
@@ -52,7 +54,7 @@ public class GraduateStats extends Application {
         
         stage.setScene(scene);
         stage.setTitle("Graduate Stats");
-        
+        stage.setResizable(false);
         stage.show();
 
     }
@@ -66,7 +68,7 @@ public class GraduateStats extends Application {
 
     Node createTableView(){
         table = new TableView<>();
-        ObservableList<Double> doubleList = gradStatsModel.getDataValues();     
+        ObservableList<DoubleValue> doubleList = gradStatsModel.getDataValues();     
         table.setItems(doubleList);
             
         if(dataTabInit == false){
@@ -78,17 +80,21 @@ public class GraduateStats extends Application {
         }
         
         for(int i = 0; i < 50; i++){
-            TableColumn<String,Double> col = new TableColumn<String,Double>();
+            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable" + i);
           
             columns.put(i, col);
             columns.get(i).setPrefWidth(75);  
             columns.get(i).setEditable(true);
+            columns.get(i).setCellValueFactory(new PropertyValueFactory("0.00"));
             table.getColumns().add(columns.get(i));
             
         }
+        /*table.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
+            DoubleValue selectedDouble = (DoubleValue) newValue;
+        });*/
         table.setMaxSize(1187.0, 500);
         table.setMinSize(1187.0, 500);
-        
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         return table;
     }
     

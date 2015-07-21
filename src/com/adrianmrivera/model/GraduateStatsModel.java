@@ -15,7 +15,7 @@ public class GraduateStatsModel {
     public ObservableList getDataValues() {
         ObservableList dataValues = FXCollections.observableArrayList();
         for(int i = 1; i <=1000; i++){
-            dataValues.add(new Double(5.00));
+            dataValues.add(new DoubleValue());
         }
         
         return dataValues;
