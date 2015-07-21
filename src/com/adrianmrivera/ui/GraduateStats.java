@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 
@@ -60,8 +60,11 @@ public class GraduateStats extends Application {
 
     Node createTableView(){
         TableView table = new TableView(gradStatsModel.getDataValues());
+        TableColumn columnOne = new TableColumn("Column One");
+        columnOne.setPrefWidth(50);
         
-    
+        
+        table.getColumns().add(columnOne);
         return table;
     }
     

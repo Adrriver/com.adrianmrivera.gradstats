@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="768" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.ui.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.ui.FXMLDocumentController">
    <children>       
       <MenuBar id="menuBar" fx:id="mainMenu" layoutY="-29.0" prefHeight="29.0" prefWidth="1204.0" useSystemMenuBar="true">
         <menus>
@@ -43,14 +43,14 @@
             </Menu>
         </menus>
       </MenuBar>
-      <Pane id="mainPane" prefHeight="768.0" prefWidth="1204.0" stylesheets="@mainStyles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane id="mainPane" prefHeight="600.0" prefWidth="1204.0" stylesheets="@mainStyles.css" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ToolBar fx:id="prToolbar" prefHeight="59.0" prefWidth="1204.0" />
-            <TabPane fx:id="tabPane" layoutX="8.0" layoutY="116.0" prefHeight="626.0" prefWidth="1187.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutX="8.0" layoutY="116.0" prefHeight="560.0" prefWidth="1187.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="dataTab" text="Data">
                      <content>
-                        <ScrollPane fx:id="dataPane" prefHeight="602.0 " prefWidth="1166.0" stylesheets="@mainStyles.css">
+                        <ScrollPane fx:id="dataPane" prefHeight="506.0" prefWidth="1187.0" stylesheets="@mainStyles.css">
                            <content>
                               
                            </content>
@@ -72,6 +72,6 @@
             <ToolBar fx:id="secToolbar" layoutY="59.0" prefHeight="48.0" prefWidth="1204.0" />
          </children>
          </Pane>
-      <HBox id="botToolbar" fx:id="tTipHBox" layoutY="742.0" prefHeight="26.0" prefWidth="1204.0" style="-fx-border-width: 2px; -fx-border-color: #444;" />
+      <HBox id="botToolbar" fx:id="tTipHBox" layoutY="678.0" prefHeight="24.0" prefWidth="1204.0" style="-fx-border-width: 2px; -fx-border-color: #444;" />
    </children>
 </AnchorPane>
