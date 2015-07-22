@@ -10,18 +10,9 @@ import javafx.collections.*;
  *
  * @author Adrian_and_Alanna
  */
-public class GraduateStatsModel {
+public class GraduateStatsModel {      
     
-    final public ObservableList<Object> getRowNums(){
-        ObservableList rowVals = FXCollections.observableArrayList();
-        for(int i = 1; i <=1000; i++){
-            rowVals.add(i);
-        }
-        
-        return rowVals;
-    }
-    
-    final public ObservableList<Object> getDataValues() {
+    final public ObservableList<DoubleValue> getDataValues() {
         ObservableList dataValues = FXCollections.observableArrayList();
         for(int i = 1; i <=1000; i++){
             dataValues.add(new DoubleValue((double)i));

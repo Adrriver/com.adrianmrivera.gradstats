@@ -26,8 +26,8 @@ public class GraduateStats extends Application {
 
     final StageStyle style;
     private HashMap<Integer, TableColumn> columns;
-    private TableView<Object> table;
-    private static boolean dataTabInit;
+    private TableView<DoubleValue> table;
+    private static boolean dataTabInit, dataTabDone;
             
             
     GraduateStatsModel gradStatsModel = new GraduateStatsModel();
@@ -67,15 +67,16 @@ public class GraduateStats extends Application {
     }
 
     Node createTableView(){
-        table = new TableView<>();
-        table.setItems(gradStatsModel.getRowNums());
-        table.setItems(gradStatsModel.getDataValues());
+       
+      if(dataTabDone == false){
+        
+        table = new TableView<>(gradStatsModel.getDataValues());           
         
         if(dataTabInit == false){
             TableColumn rowCol = new TableColumn<>("n");
             rowCol.setPrefWidth(50);  
             rowCol.setEditable(false);  
-            rowCol.setCellValueFactory(new PropertyValueFactory<>("rowVal"));
+            rowCol.setCellValueFactory(new PropertyValueFactory<>("valueMain"));
             rowCol.setCellFactory(TextFieldTableCell.forTableColumn());
             table.getColumns().add(rowCol);
             dataTabInit = true;
@@ -109,10 +110,56 @@ public class GraduateStats extends Application {
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         table.getSelectionModel().setCellSelectionEnabled(true);        
         table.setEditable(true);
+        
+            dataTabDone = true;
+      // Create variable control tableview
+      } else {
+          table = new TableView<>(gradStatsModel.getDataValues());           
+        
+        if(dataTabInit == false){
+            TableColumn rowCol = new TableColumn<>("n");
+            rowCol.setPrefWidth(50);  
+            rowCol.setEditable(false);  
+            rowCol.setCellValueFactory(new PropertyValueFactory<>("valueMain"));
+            rowCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            table.getColumns().add(rowCol);
+            dataTabInit = true;
+        }
+        
+        for(int i = 1; i <= 50; i++){
+            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable " + i);
+          
+            columns.put(i, col);
+            columns.get(i).setPrefWidth(75);  
+            
+            columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
+            columns.get(i).setCellFactory(TextFieldTableCell.forTableColumn());
+            columns.get(i).setOnEditCommit(
+                    new EventHandler<CellEditEvent<DoubleValue, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<DoubleValue, String> t) {
+                            ((DoubleValue) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(Double.parseDouble(t.getNewValue()));
+                        }
+                    });
+            table.getColumns().add(columns.get(i));
+            
+        }
+        /*table.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
+            DoubleValue selectedDouble = (DoubleValue) newValue;
+        });*/
+        table.setMaxSize(1187.0, 500);
+        table.setMinSize(1187.0, 500);
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().setCellSelectionEnabled(true);        
+        table.setEditable(true);
+      }
         return table;
     }
     
     public static boolean getDataTabInit(){
         return dataTabInit;
     }
+
 }
