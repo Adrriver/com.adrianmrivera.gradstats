@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1204" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianmrivera.ui.FXMLDocumentController">
    <children>       
@@ -45,7 +47,37 @@
       </MenuBar>
       <Pane id="mainPane" prefHeight="600.0" prefWidth="1204.0" stylesheets="@mainStyles.css" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ToolBar fx:id="prToolbar" prefHeight="59.0" prefWidth="1204.0" />
+            <ToolBar fx:id="prToolbar" prefHeight="69.0" prefWidth="1204.0">
+               <items>
+                  <Button id="newFile" fx:id="newFile" defaultButton="true" layoutX="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" snapToPixel="false" style="-fx-background-color: transparent;" stylesheets="@mainStyles.css" translateX="5.0" translateY="-10.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                     <graphic>
+        <ImageView fitHeight="30" fitWidth="30" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="http://icons.iconarchive.com/icons/mirella-gabriele/fantasy-mediaeval/128/Poison-red-icon.png" />
+          </image>
+        </ImageView>
+      </graphic>
+                  </Button>
+                  <Button fx:id="openFile" defaultButton="true" layoutX="10.0" layoutY="16.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" snapToPixel="false" textAlignment="CENTER" translateX="5.0" translateY="-10.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>                     
+                  </Button>
+                  <Button fx:id="saveFile" defaultButton="true" layoutX="44.0" layoutY="16.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" snapToPixel="false" textAlignment="CENTER" translateX="5.0" translateY="-10.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="saveAs" defaultButton="true" layoutX="78.0" layoutY="16.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" snapToPixel="false" textAlignment="CENTER" translateX="5.0" translateY="-10.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Button>
+                  <Separator maxHeight="30.0" minWidth="12.0" orientation="VERTICAL" prefHeight="20.0" prefWidth="7.0" translateX="5.0" translateY="-10.0" />
+               </items></ToolBar>
             <TabPane fx:id="tabPane" layoutX="8.0" layoutY="116.0" prefHeight="560.0" prefWidth="1187.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="dataTab" text="Data">
@@ -67,7 +99,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <ToolBar fx:id="secToolbar" layoutY="59.0" prefHeight="48.0" prefWidth="1204.0" />
+            <ToolBar fx:id="secToolbar" layoutY="70.0" prefHeight="37.0" prefWidth="1204.0" />
          </children>
          </Pane>
       <HBox id="botToolbar" fx:id="tTipHBox" layoutY="678.0" prefHeight="24.0" prefWidth="1204.0" style="-fx-border-width: 2px; -fx-border-color: #444;" />

@@ -14,7 +14,7 @@ import javafx.scene.input.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
-
+import javafx.scene.image.*;
 
 /**
  *
@@ -45,6 +45,9 @@ public class FXMLDocumentController implements Initializable {
     private HBox tTipHBox;
     @FXML
     private MenuItem file_Close;
+    @FXML
+    private Button newFile;
+    
     
     private Stage stage;
     
