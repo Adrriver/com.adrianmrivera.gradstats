@@ -12,10 +12,19 @@ import javafx.collections.*;
  */
 public class GraduateStatsModel {
     
-    public ObservableList getDataValues() {
+    final public ObservableList<Object> getRowNums(){
+        ObservableList rowVals = FXCollections.observableArrayList();
+        for(int i = 1; i <=1000; i++){
+            rowVals.add(i);
+        }
+        
+        return rowVals;
+    }
+    
+    final public ObservableList<Object> getDataValues() {
         ObservableList dataValues = FXCollections.observableArrayList();
         for(int i = 1; i <=1000; i++){
-            dataValues.add(new DoubleValue());
+            dataValues.add(new DoubleValue((double)i));
         }
         
         return dataValues;

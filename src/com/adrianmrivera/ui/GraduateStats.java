@@ -15,8 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.*;
 /**
  *
@@ -26,8 +26,8 @@ public class GraduateStats extends Application {
 
     final StageStyle style;
     private HashMap<Integer, TableColumn> columns;
-    private TableView<DoubleValue> table;
-    private boolean dataTabInit;
+    private TableView<Object> table;
+    private static boolean dataTabInit;
             
             
     GraduateStatsModel gradStatsModel = new GraduateStatsModel();
@@ -68,24 +68,36 @@ public class GraduateStats extends Application {
 
     Node createTableView(){
         table = new TableView<>();
-        ObservableList<DoubleValue> doubleList = gradStatsModel.getDataValues();     
-        table.setItems(doubleList);
-            
+        table.setItems(gradStatsModel.getRowNums());
+        table.setItems(gradStatsModel.getDataValues());
+        
         if(dataTabInit == false){
-            TableColumn rowCol = new TableColumn("n");
+            TableColumn rowCol = new TableColumn<>("n");
             rowCol.setPrefWidth(50);  
-            rowCol.setEditable(false);
+            rowCol.setEditable(false);  
+            rowCol.setCellValueFactory(new PropertyValueFactory<>("rowVal"));
+            rowCol.setCellFactory(TextFieldTableCell.forTableColumn());
             table.getColumns().add(rowCol);
             dataTabInit = true;
         }
         
-        for(int i = 0; i < 50; i++){
-            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable" + i);
+        for(int i = 1; i <= 50; i++){
+            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable " + i);
           
             columns.put(i, col);
             columns.get(i).setPrefWidth(75);  
-            columns.get(i).setEditable(true);
-            columns.get(i).setCellValueFactory(new PropertyValueFactory("0.00"));
+            
+            columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
+            columns.get(i).setCellFactory(TextFieldTableCell.forTableColumn());
+            columns.get(i).setOnEditCommit(
+                    new EventHandler<CellEditEvent<DoubleValue, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<DoubleValue, String> t) {
+                            ((DoubleValue) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(Double.parseDouble(t.getNewValue()));
+                        }
+                    });
             table.getColumns().add(columns.get(i));
             
         }
@@ -95,7 +107,12 @@ public class GraduateStats extends Application {
         table.setMaxSize(1187.0, 500);
         table.setMinSize(1187.0, 500);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().setCellSelectionEnabled(true);        
+        table.setEditable(true);
         return table;
     }
     
+    public static boolean getDataTabInit(){
+        return dataTabInit;
+    }
 }

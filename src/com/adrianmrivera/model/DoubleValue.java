@@ -13,20 +13,21 @@ import javafx.beans.property.SimpleDoubleProperty;
  * @author Adrian_and_Alanna
  */
 public class DoubleValue {
-    private DoubleProperty initValue;
+    private DoubleProperty valueMain;
     
-    public void DoubleValue(Double value){
-        setInitValue(value);
+    public DoubleValue(Double value){
+        setValue(value);
     }
     
-    public DoubleProperty initValueProperty(){
-        if(initValue == null)
-            initValue = new SimpleDoubleProperty(0.00);
+    public DoubleProperty valueProperty(){
+        if(valueMain == null)
+            valueMain = new SimpleDoubleProperty(0.00);
             
-            return initValue;
+           return valueMain;
     }
     
-    public void setInitValue(Double val){
-        initValueProperty().set(val);
+    public final void setValue(Double val){
+        valueProperty().set(val);
     }
+
 }
