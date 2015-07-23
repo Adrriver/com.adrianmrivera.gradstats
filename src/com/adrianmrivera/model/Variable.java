@@ -8,7 +8,8 @@ package com.adrianmrivera.model;
 import javafx.beans.property.*;
 
 import javafx.collections.*;
-import javax.management.relation.Role;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 
 /**
  *
@@ -17,14 +18,14 @@ import javax.management.relation.Role;
 public class Variable {
     
     private StringProperty varName;
-    private ObservableList<String> type;
+    private ContextMenu type;
     private StringProperty label;
     private StringProperty values;
-    private ObservableList<Measure> measures;
-    private ObservableList<Roles> role;
+    private ContextMenu measures;
+    private ContextMenu role;
     
-    public Variable(String vName, ObservableList<String> tp, String lbl, String vals,
-            ObservableList<Measure> msr, ObservableList<Role> rl) {
+    public Variable(String vName, ContextMenu tp, String lbl, String vals,
+            ContextMenu msr, ContextMenu rl) {
         
                 setVarName(vName);
                 setVarType(tp);
@@ -48,16 +49,16 @@ public class Variable {
         return varName;
     }
      //type
-    public void setVarType(int typesQuant, String tp){
-        varTypeList().set(typesQuant, tp);
+    public void setVarType(ContextMenu cMenu){
+        varTypeList().set(cMenu);
     }
-    /*public ObservableList getTypes(){
+    public SimpleObjectProperty<ContextMenu> getTypes(){
         return varTypeList().get();
-    }*/
-    public ObservableList<String> varTypeList(){
-        if( type == null){
-            ObservableList<String> list = FXCollections.observableArrayList();
-            type = list;
+    }
+    public SimpleObjectProperty<ContextMenu> varTypeList(){
+        if( type == null){            
+            SimpleObjectProperty<ContextMenu> cm = new SimpleObjectProperty(new ContextMenu());
+            type = cm;
         }
         return type;
     }
