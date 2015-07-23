@@ -101,7 +101,7 @@ public class Variable {
         }
         return measures;
     }
-    
+    //roles
     public void setRoles(int roles, Roles msr){
         roleList().set(roles, msr);
     }
