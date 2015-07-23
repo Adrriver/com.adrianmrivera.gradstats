@@ -82,7 +82,9 @@
                 <Tab fx:id="dataTab" text="Data">
                      <content>
                         <Pane fx:id="dataPane" prefHeight="580.0" prefWidth="1187.0" stylesheets="@mainStyles.css">
-                           
+                           <children>
+                               <ComboBox fx:id="cm" promptText="type" />
+                           </children>
                         </Pane>
                            
                      </content>
