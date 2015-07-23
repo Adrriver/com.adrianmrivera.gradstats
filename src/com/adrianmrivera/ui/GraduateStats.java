@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.*;
@@ -110,52 +111,112 @@ public class GraduateStats extends Application {
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         table.getSelectionModel().setCellSelectionEnabled(true);        
         table.setEditable(true);
-        
             dataTabDone = true;
+            return table;
+            
       // Create variable control tableview
       } else {
-          table = new TableView<>(gradStatsModel.getDataValues());           
-        
-        if(dataTabInit == false){
-            TableColumn rowCol = new TableColumn<>("n");
-            rowCol.setPrefWidth(50);  
-            rowCol.setEditable(false);  
-            rowCol.setCellValueFactory(new PropertyValueFactory<>("valueMain"));
-            rowCol.setCellFactory(TextFieldTableCell.forTableColumn());
-            table.getColumns().add(rowCol);
-            dataTabInit = true;
-        }
-        
-        for(int i = 1; i <= 50; i++){
-            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable " + i);
+          TableView varTable = new TableView(gradStatsModel.getVarAttributes());
           
-            columns.put(i, col);
-            columns.get(i).setPrefWidth(75);  
-            
-            columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
-            columns.get(i).setCellFactory(TextFieldTableCell.forTableColumn());
-            columns.get(i).setOnEditCommit(
-                    new EventHandler<CellEditEvent<DoubleValue, String>>() {
+          TableColumn<String, String> nameColumn = new TableColumn<>("Var Name");
+          nameColumn.setCellValueFactory(new PropertyValueFactory<>("varName"));
+          nameColumn.setPrefWidth(90);     
+          nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            /*labelColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<String, String>>() {
                         @Override
-                        public void handle(CellEditEvent<DoubleValue, String> t) {
-                            ((DoubleValue) t.getTableView().getItems().get(
+                        public void handle(CellEditEvent<String, String> t) {
+                            ((String) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
-                                    ).setValue(Double.parseDouble(t.getNewValue()));
+                                    ).setValue(t.getNewValue());
+                        }
+                    });*/
+          TableColumn typeColumn = new TableColumn("Type");
+          typeColumn.setCellValueFactory(new PropertyValueFactory("type"));
+          typeColumn.setPrefWidth(90); 
+             typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+            typeColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<ComboBox, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<ComboBox, String> t) {
+                            ((ComboBox) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getNewValue());
+                        }
+                    });          
+          
+          TableColumn labelColumn = new TableColumn("Var Name");
+          labelColumn.setCellValueFactory(new PropertyValueFactory("label"));
+          labelColumn.setPrefWidth(90);          
+           labelColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            /*labelColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<String, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<String, String> t) {
+                            ((String) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getNewValue());
+                        }
+                    });*/
+          TableColumn valsColumn = new TableColumn("Values");
+          valsColumn.setCellValueFactory(new PropertyValueFactory("values"));
+          valsColumn.setPrefWidth(90);     
+           valsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            /*labelColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<String, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<String, String> t) {
+                            ((String) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getNewValue());
+                        }
+                    });*/
+          TableColumn measuresColumn = new TableColumn("Measures");      
+          measuresColumn.setCellValueFactory(new PropertyValueFactory("measures"));
+          measuresColumn.setPrefWidth(90);        
+           measuresColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+            measuresColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<ComboBox, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<ComboBox, String> t) {
+                            ((ComboBox) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getNewValue());
                         }
                     });
-            table.getColumns().add(columns.get(i));
+          TableColumn roleColumn = new TableColumn("Role");
+          roleColumn.setCellValueFactory(new PropertyValueFactory("role"));
+          roleColumn.setPrefWidth(90);        
+          roleColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+            roleColumn.setOnEditCommit(
+                    new EventHandler<CellEditEvent<ComboBox, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<ComboBox, String> t) {
+                            ((ComboBox) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getNewValue());
+                        }
+                    });
+          
+          varTable.getColumns().addAll(nameColumn, typeColumn, labelColumn, valsColumn, measuresColumn, roleColumn );
+          varTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
+              Variable selectedVariable = (Variable) newValue;
+              });
+          
+              varTable.setMaxSize(1187.0, 500);
+              varTable.setMinSize(1187.0, 500);
+              varTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+              varTable.getSelectionModel().setCellSelectionEnabled(true);              
+              varTable.setEditable(true);
+
+                return varTable;
+       
             
-        }
+      }
         /*table.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
             DoubleValue selectedDouble = (DoubleValue) newValue;
         });*/
-        table.setMaxSize(1187.0, 500);
-        table.setMinSize(1187.0, 500);
-        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        table.getSelectionModel().setCellSelectionEnabled(true);        
-        table.setEditable(true);
-      }
-        return table;
+        
     }
     
     public static boolean getDataTabInit(){

@@ -6,11 +6,21 @@
 package com.adrianmrivera.model;
 
 import javafx.collections.*;
+import javafx.scene.control.ComboBox;
 /**
  *
  * @author Adrian_and_Alanna
  */
 public class GraduateStatsModel {      
+    
+     final public ObservableList<Variable> getVarAttributes() {
+        ObservableList attributes = FXCollections.observableArrayList();
+        for(int i = 1; i <=1000; i++){
+            attributes.add(new Variable("Name", new ComboBox(null), "Label", "Values", new ComboBox(null), new ComboBox(null)));
+        }
+        
+        return attributes;
+    }
     
     final public ObservableList<DoubleValue> getDataValues() {
         ObservableList dataValues = FXCollections.observableArrayList();
