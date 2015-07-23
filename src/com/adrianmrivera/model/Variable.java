@@ -7,9 +7,14 @@ package com.adrianmrivera.model;
 
 import javafx.beans.property.*;
 
-import javafx.collections.*;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import static jdk.nashorn.internal.objects.NativeJava.type;
 
 /**
  *
@@ -18,16 +23,16 @@ import javafx.scene.control.MenuItem;
 public class Variable {
     
     private StringProperty varName;
-    private ContextMenu type;
+    private ComboBox type;
     private StringProperty label;
     private StringProperty values;
-    private ContextMenu measures;
-    private ContextMenu role;
+    private ComboBox measures;
+    private ComboBox role;
     
-    public Variable(String vName, ContextMenu tp, String lbl, String vals,
-            ContextMenu msr, ContextMenu rl) {
+    public Variable(String vName, ComboBox tp, String lbl, String vals,
+            ComboBox msr, ComboBox rl) {
         
-                setVarName(vName);
+                setVarName(vName); 
                 setVarType(tp);
                 setLab(lbl);
                 setValue(vals);
@@ -49,19 +54,53 @@ public class Variable {
         return varName;
     }
      //type
-    public void setVarType(ContextMenu cMenu){
-        varTypeList().set(cMenu);
+    public void setVarType(ComboBox cMenu){
+        setVarTypeList(cMenu);
     }
-    public SimpleObjectProperty<ContextMenu> getTypes(){
-        return varTypeList().get();
-    }
-    public SimpleObjectProperty<ContextMenu> varTypeList(){
-        if( type == null){            
-            SimpleObjectProperty<ContextMenu> cm = new SimpleObjectProperty(new ContextMenu());
-            type = cm;
-        }
+    public Node getTypes(){
         return type;
     }
+    public Node setVarTypeList(Node cMenu){
+        if( type != null){            
+            type = new ComboBox<>();
+            type.getItems().addAll("A","B","C","D","E");
+    type.setCellFactory(
+        new Callback<ListView<String>, ListCell<String>>() {
+            @Override 
+                public ListCell<String> call(ListView<String> param) {
+                final ListCell<String> cell = new ListCell<String>() {
+                    {
+                        super.setPrefWidth(100);
+                    }    
+                    @Override public void updateItem(String item, 
+                        boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item != null) {
+                                setText(item);    
+                                if (item.contains("A")) {                                    
+                                    setTextFill(Color.RED);
+                                }
+                                else if (item.contains("B")){
+                                    setTextFill(Color.GREEN);
+                                }
+                                else {
+                                    setTextFill(Color.BLACK);
+                                }
+                            }
+                            else {
+                                setText(null);
+                            }
+                        }
+            };
+            return cell;
+            }
+           
+        });
+            }
+        return type;
+    }
+
+    
     //label
     public void setLab(String label) {
         labelProperty().set(label);
@@ -91,27 +130,33 @@ public class Variable {
     }
     
      //measure
-    public void setMeasType(int measures, Measure msr){
-        measureList().set(measures, msr);
+    public void setMeasType(Node msr){
+        setMeasureList(msr);
     }
-   
-    public ObservableList<Measure> measureList(){
+    public Node getMeasType(){
+        return measures;
+    }
+    public Node setMeasureList(Node msr){
         if( measures == null){
-            ObservableList<Measure> msrs = FXCollections.observableArrayList();
+            ComboBox<Label> msrs = new ComboBox<>();
+            msrs.getItems().addAll(new Label("Ordinal"), new Label("Inverval/Scale"), new Label("Nominal"));
             measures = msrs;
         }
         return measures;
     }
     //roles
-    public void setRoles(int roles, Roles msr){
-        roleList().set(roles, msr);
+    public void setRoles(ComboBox roleBox){
+        setRoleList(roleBox);
     }
    
-    public ObservableList<Roles> roleList(){
+    public Node setRoleList(Node roleBox){
         if( role == null){
-            ObservableList<Roles> rl = FXCollections.observableArrayList();
-            role = rl;
+            ComboBox<Label> rb = new ComboBox<>();
+            rb.getItems().addAll(new Label("Input"), new Label("Inverval/Scale"), new Label("Nominal"));
+            role = rb;
         }
         return role;
     }
 }
+
+  
