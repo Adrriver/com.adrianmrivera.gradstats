@@ -6,15 +6,15 @@
 package com.adrianmrivera.model;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import static jdk.nashorn.internal.objects.NativeJava.type;
 
 /**
  *
@@ -60,42 +60,13 @@ public class Variable {
     public Node getTypes(){
         return type;
     }
-    public Node setVarTypeList(Node cMenu){
+    public ComboBox setVarTypeList(Node cMenu){
+        ObservableList<String> types = FXCollections.observableArrayList(
+            "Numeric",
+            "Currency",
+            "Scientific Notation");
         if( type != null){            
-            type = new ComboBox<>();
-            type.getItems().addAll("A","B","C","D","E");
-    type.setCellFactory(
-        new Callback<ListView<String>, ListCell<String>>() {
-            @Override 
-                public ListCell<String> call(ListView<String> param) {
-                final ListCell<String> cell = new ListCell<String>() {
-                    {
-                        super.setPrefWidth(100);
-                    }    
-                    @Override public void updateItem(String item, 
-                        boolean empty) {
-                            super.updateItem(item, empty);
-                            if (item != null) {
-                                setText(item);    
-                                if (item.contains("A")) {                                    
-                                    setTextFill(Color.RED);
-                                }
-                                else if (item.contains("B")){
-                                    setTextFill(Color.GREEN);
-                                }
-                                else {
-                                    setTextFill(Color.BLACK);
-                                }
-                            }
-                            else {
-                                setText(null);
-                            }
-                        }
-            };
-            return cell;
-            }
-           
-        });
+            type = new ComboBox(types);            
             }
         return type;
     }

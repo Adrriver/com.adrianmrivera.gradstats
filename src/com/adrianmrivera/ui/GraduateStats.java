@@ -119,8 +119,9 @@ public class GraduateStats extends Application {
           TableView varTable = new TableView(gradStatsModel.getVarAttributes());
           
           TableColumn<String, String> nameColumn = new TableColumn<>("Var Name");
+          nameColumn.setResizable(false);
           nameColumn.setCellValueFactory(new PropertyValueFactory<>("varName"));
-          nameColumn.setPrefWidth(90);     
+          nameColumn.setPrefWidth(100);     
           nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             /*labelColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<String, String>>() {
@@ -132,8 +133,9 @@ public class GraduateStats extends Application {
                         }
                     });*/
           TableColumn typeColumn = new TableColumn("Type");
+          typeColumn.setResizable(false);
           typeColumn.setCellValueFactory(new PropertyValueFactory("type"));
-          typeColumn.setPrefWidth(90); 
+          typeColumn.setPrefWidth(100); 
              typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
             typeColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<ComboBox, String>>() {
@@ -146,8 +148,9 @@ public class GraduateStats extends Application {
                     });          
           
           TableColumn labelColumn = new TableColumn("Var Name");
+          labelColumn.setResizable(false);
           labelColumn.setCellValueFactory(new PropertyValueFactory("label"));
-          labelColumn.setPrefWidth(90);          
+          labelColumn.setPrefWidth(100);          
            labelColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             /*labelColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<String, String>>() {
@@ -159,8 +162,9 @@ public class GraduateStats extends Application {
                         }
                     });*/
           TableColumn valsColumn = new TableColumn("Values");
+          valsColumn.setResizable(false);
           valsColumn.setCellValueFactory(new PropertyValueFactory("values"));
-          valsColumn.setPrefWidth(90);     
+          valsColumn.setPrefWidth(100);     
            valsColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             /*labelColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<String, String>>() {
@@ -171,9 +175,10 @@ public class GraduateStats extends Application {
                                     ).setValue(t.getNewValue());
                         }
                     });*/
-          TableColumn measuresColumn = new TableColumn("Measures");      
+          TableColumn measuresColumn = new TableColumn("Measures");  
+          measuresColumn.setResizable(false);
           measuresColumn.setCellValueFactory(new PropertyValueFactory("measures"));
-          measuresColumn.setPrefWidth(90);        
+          measuresColumn.setPrefWidth(100);        
            measuresColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
             measuresColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<ComboBox, String>>() {
@@ -185,8 +190,9 @@ public class GraduateStats extends Application {
                         }
                     });
           TableColumn roleColumn = new TableColumn("Role");
+          roleColumn.setResizable(false);
           roleColumn.setCellValueFactory(new PropertyValueFactory("role"));
-          roleColumn.setPrefWidth(90);        
+          roleColumn.setPrefWidth(100);        
           roleColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
             roleColumn.setOnEditCommit(
                     new EventHandler<CellEditEvent<ComboBox, String>>() {
@@ -206,7 +212,8 @@ public class GraduateStats extends Application {
               varTable.setMaxSize(1187.0, 500);
               varTable.setMinSize(1187.0, 500);
               varTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-              varTable.getSelectionModel().setCellSelectionEnabled(true);              
+              varTable.getSelectionModel().setCellSelectionEnabled(true);  
+              varTable.setFocusTraversable(true);
               varTable.setEditable(true);
 
                 return varTable;
