@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -137,19 +138,27 @@ public class GraduateStats extends Application {
                         }
                     });*/
           
-          TableColumn<ComboBox, String> typeColumn = new TableColumn<>("Type");
+          TableColumn<ObservableList, String> typeColumn = new TableColumn<>("Type");
           typeColumn.setResizable(false);
-          typeColumn.setCellValueFactory(new PropertyValueFactory<ComboBox, String>("type"));
+          typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
           typeColumn.setPrefWidth(100); 
           typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getTypes()));
           typeColumn.setOnEditCommit(
-                    new EventHandler<CellEditEvent<ComboBox, String>>() {
+                    new EventHandler<CellEditEvent<ObservableList, String>>() {
                         @Override
-                        public void handle(CellEditEvent<ComboBox, String> t) {
-                            ((ComboBox) t.getTableView().getItems().get(
+                        public void handle(CellEditEvent<ObservableList, String> t) {
+                            if( t.getNewValue() != null){
+                            ((Variable) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                                     ).setValue(t.getNewValue());
+                               
+                            } else {
+                                ((Variable) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                                    ).setValue(t.getOldValue());
+                                System.out.println(t.getOldValue());
                         }
+                       }
                     });
           
           
@@ -199,7 +208,7 @@ public class GraduateStats extends Application {
           varTable.getColumns().addAll(nameColumn, typeColumn, valsColumn, measuresColumn, roleColumn );
           varTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
               Variable selectedVariable = (Variable) newValue;
-                        System.out.println(typeColumn.getCellData(0));
+              Variable prevSelectedVar = (Variable) oldValue;         
 
               });
           

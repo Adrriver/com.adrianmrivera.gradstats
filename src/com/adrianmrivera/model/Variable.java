@@ -12,9 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
 
 /**
  *
@@ -23,7 +20,7 @@ import javafx.util.Callback;
 public class Variable {
     
     private SimpleStringProperty varName;
-    public static ObservableList type;
+    private ObservableList type;
     private StringProperty label;
     private StringProperty values;
     private ComboBox measures;
@@ -61,12 +58,14 @@ public class Variable {
         return type;
     }
     public ObservableList setVarTypeList(ObservableList cMenu){
-        cMenu = FXCollections.observableArrayList(
-            "Numeric",
-            "Currency",
-            "Scientific Notation");
+            cMenu = FXCollections.observableArrayList(
+                "Numeric",
+                "Currency",
+                "Scientific Notation");
+        
+        
         if( type == null){            
-            
+            type = cMenu;
             }
         return type;
     }
