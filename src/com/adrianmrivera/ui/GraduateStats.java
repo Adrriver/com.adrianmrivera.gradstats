@@ -102,6 +102,7 @@ public class GraduateStats extends Application {
                             ((DoubleValue) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                                     ).setValue(Double.parseDouble(t.getNewValue()));
+                            
                         }
                     });
             table.getColumns().add(columns.get(i));
@@ -143,23 +144,13 @@ public class GraduateStats extends Application {
           typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
           typeColumn.setPrefWidth(100); 
           typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getTypes()));
-          typeColumn.setOnEditCommit(
-                    new EventHandler<CellEditEvent<ObservableList, String>>() {
-                        @Override
-                        public void handle(CellEditEvent<ObservableList, String> t) {
-                            if( t.getNewValue() != null){
-                            ((Variable) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                                    ).setValue(t.getNewValue());
-                               
-                            } else {
-                                ((Variable) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                                    ).setValue(t.getOldValue());
-                                System.out.println(t.getOldValue());
-                        }
-                       }
-                    });
+          typeColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
+              ((Variable) t.getTableView().getItems().get(
+                      t.getTablePosition().getRow())
+                      ).setValue(t.getNewValue());
+     
+          });
+          
           
           
           TableColumn valsColumn = new TableColumn("Values");
@@ -206,19 +197,19 @@ public class GraduateStats extends Application {
                     });
           
           varTable.getColumns().addAll(nameColumn, typeColumn, valsColumn, measuresColumn, roleColumn );
-          varTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
+          varTable.getSelectionModel().selectedItemProperty()
+                    .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
               Variable selectedVariable = (Variable) newValue;
-              Variable prevSelectedVar = (Variable) oldValue;         
-
-              });
+              Variable prevSelectedVar = (Variable) oldValue;
+            });
           
               varTable.setMaxSize(1187.0, 500);
               varTable.setMinSize(1187.0, 500);
               varTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-              varTable.getSelectionModel().setCellSelectionEnabled(true);  
+              varTable.getSelectionModel().setCellSelectionEnabled(true);            
               varTable.setFocusTraversable(true);
               varTable.setEditable(true);
-
+               
                 return varTable;
         
             
