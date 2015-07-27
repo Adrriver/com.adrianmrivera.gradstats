@@ -22,18 +22,18 @@ import javafx.util.Callback;
  */
 public class Variable {
     
-    private StringProperty varName;
-    private ComboBox type;
+    private SimpleStringProperty varName;
+    public static SimpleObjectProperty type;
     private StringProperty label;
     private StringProperty values;
     private ComboBox measures;
     private ComboBox role;
     
-    public Variable(String vName, ComboBox tp, String lbl, String vals,
+    public Variable(String vName, ObservableList tp, String lbl, String vals,
             ComboBox msr, ComboBox rl) {
         
                 setVarName(vName); 
-                setVarType(tp);
+                setVarType = new SimpleObjectProperty(tp);
                 setLab(lbl);
                 setValue(vals);
                 setMeasType(msr);
@@ -54,19 +54,19 @@ public class Variable {
         return varName;
     }
      //type
-    public void setVarType(ComboBox cMenu){
-        setVarTypeList(cMenu);
+    public void setVarType(ObservableList cMenu){
+        setVarTypeList.set(cMenu);
     }
-    public Node getTypes(){
-        return type;
+    public ObservableList getTypes(){
+        return type.get();
     }
-    public ComboBox setVarTypeList(Node cMenu){
-        ObservableList<String> types = FXCollections.observableArrayList(
+    public ObservableList setVarTypeList(ObservableList cMenu){
+        cMenu = FXCollections.observableArrayList(
             "Numeric",
             "Currency",
             "Scientific Notation");
-        if( type != null){            
-            type = new ComboBox(types);            
+        if( type == null){            
+            
             }
         return type;
     }
