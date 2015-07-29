@@ -5,9 +5,13 @@
  */
 package com.adrianmrivera.model;
 
+import com.adrianmrivera.ui.DragSelection;
 import javafx.collections.*;
 import javafx.scene.control.ComboBox;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
 /**
  *
  * @author Adrian_and_Alanna
@@ -32,5 +36,8 @@ public class GraduateStatsModel {
         
         return dataValues;
     }
+
+    
     
 }
+

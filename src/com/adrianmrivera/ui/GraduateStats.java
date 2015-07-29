@@ -15,13 +15,13 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.*;
+import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 /**
  *
@@ -86,7 +86,7 @@ public class GraduateStats extends Application {
             table.getColumns().add(rowCol);
             dataTabInit = true;
         }
-        
+         final Callback<TableColumn<DoubleValue, String>, TableCell<DoubleValue, String>> cellFactory = new DragSelectionCellFactory();  
         for(int i = 1; i <= 50; i++){
             TableColumn<DoubleValue, String> col = new TableColumn<>("Variable " + i);
           
@@ -94,7 +94,7 @@ public class GraduateStats extends Application {
             columns.get(i).setPrefWidth(75);  
             
             columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
-            columns.get(i).setCellFactory(TextFieldTableCell.forTableColumn());
+            columns.get(i).setCellFactory(cellFactory);
             columns.get(i).setOnEditCommit(
                     new EventHandler<CellEditEvent<DoubleValue, String>>() {
                         @Override
@@ -220,8 +220,9 @@ public class GraduateStats extends Application {
         
     }
     
-    public static boolean getDataTabInit(){
-        return dataTabInit;
-    }
+    
+    
 
 }
+
+
