@@ -10,14 +10,15 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Adrian_and_Alanna
+ * @author Adrian_Rivera
  */
 public class CentralTendency {
     
     private ArrayList<double[]> sample;
+    
     private int sampleNum;
     private double[] mean;
-    private double[] mode;
+    private Object[] mode;
     private double[] median;
     private double[] maximum;
     private double[] minimum;
@@ -25,34 +26,58 @@ public class CentralTendency {
     private double[] standardDeviation;
     private double[] variance;
     private double[] sum;
+    private boolean nominal;
     
-    public CentralTendency(ArrayList<double[]> sample){
+    public CentralTendency(ArrayList<Object[]> sample, boolean nom){
         int i = 0;
-        sample = new ArrayList<>();
-                            
-        this.sample.addAll(sample);
-        sampleNum = this.sample.size();
-           
-            setMean();
-            setMode();
-            setMedian();
-            setMax();
-            setMin();
-            setRange();
-            setSD();
+        nominal = nom;        
+        
+        
+        if(!nominal){
+            sampleNum = this.sample.size();
+            sample = new ArrayList<>();                            
+            this.sample.addAll(sample);
+                setMean();
+                setMode();
+                setMedian();
+                setMax();
+                setMin();
+                setRange();
+                setSD();
             setVariance();
             setSum();
-        
-            
+        } else {
+            setMode();
         }
+            
+    }
     
     public void setMean(){
+        int i = 0;
+        int n;
+        for( double[] var : sample ) {            
+            for( double val : var ) {
+                sum[i] += val;                
+            }
+            n = sum.length;
+                mean[i] = (sum[i]/n);
+            i++;
+        }
         
     }
     public double[] getMean() {
         return mean;
     }
-    public double[] getMode() {
+    public void setMode(){
+        if(nominal) {
+            for( double[] var : sample ) {
+                for( )
+            }
+        } else {
+            
+        }
+    }
+    public Object[] getMode() {
         return mode;
     }
     public double[] getMedian() {
