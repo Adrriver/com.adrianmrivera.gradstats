@@ -6,6 +6,7 @@
 package com.adrianmrivera.ui;
 
 import com.adrianmrivera.model.*;
+import java.awt.Font;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,12 +16,15 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 /**
@@ -31,7 +35,7 @@ public class GraduateStats extends Application {
 
     final StageStyle style;
     private HashMap<Integer, TableColumn> columns;
-    private TableView<DoubleValue> table;
+    private TableView<ObjectValue> table;
     private static boolean dataTabInit, dataTabDone;
     private Variable variable;
             
@@ -64,31 +68,26 @@ public class GraduateStats extends Application {
         
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     Node createTableView(){
        
       if(dataTabDone == false){
         
         table = new TableView<>(gradStatsModel.getDataValues());           
+        table.setId("dataTable");
         
         if(dataTabInit == false){
-            TableColumn rowCol = new TableColumn<>("n");
-            rowCol.setPrefWidth(50);  
+            TableColumn rowCol = new TableColumn<>("Observation");
+            rowCol.setId("Observations");
+            rowCol.setPrefWidth(100);  
             rowCol.setEditable(false);  
             rowCol.setCellValueFactory(new PropertyValueFactory<>("valueMain"));
             rowCol.setCellFactory(TextFieldTableCell.forTableColumn());
             table.getColumns().add(rowCol);
             dataTabInit = true;
         }
-         final Callback<TableColumn<DoubleValue, String>, TableCell<DoubleValue, String>> cellFactory = new DragSelectionCellFactory();  
+         final Callback<TableColumn<ObjectValue, String>, TableCell<ObjectValue, String>> cellFactory = new DragSelectionCellFactory();  
         for(int i = 1; i <= 50; i++){
-            TableColumn<DoubleValue, String> col = new TableColumn<>("Variable " + i);
+            TableColumn<ObjectValue, String> col = new TableColumn<>("Variable " + i);
           
             columns.put(i, col);
             columns.get(i).setPrefWidth(75);  
@@ -96,21 +95,19 @@ public class GraduateStats extends Application {
             columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
             columns.get(i).setCellFactory(cellFactory);
             columns.get(i).setOnEditCommit(
-                    new EventHandler<CellEditEvent<DoubleValue, String>>() {
+                    new EventHandler<CellEditEvent<ObjectValue, String>>() {
                         @Override
-                        public void handle(CellEditEvent<DoubleValue, String> t) {
-                            ((DoubleValue) t.getTableView().getItems().get(
+                        public void handle(CellEditEvent<ObjectValue, String> t) {
+                            ((ObjectValue) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
-                                    ).setValue(Double.parseDouble(t.getNewValue()));
+                                    ).setValue(t.getNewValue());
                             
                         }
                     });
             table.getColumns().add(columns.get(i));
             
         }
-        /*table.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-            DoubleValue selectedDouble = (DoubleValue) newValue;
-        });*/
+        
         table.setMaxSize(1187.0, 500);
         table.setMinSize(1187.0, 500);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -121,24 +118,23 @@ public class GraduateStats extends Application {
             
       // Create variable control tableview
       } else {
+          
           ObservableList ol = FXCollections.observableArrayList();
-          variable = new Variable("Name", ol , "Label", "Values", new ComboBox(null), new ComboBox(null));
-          TableView varTable = new TableView<>(gradStatsModel.getVarAttributes(variable));
-          TableColumn<String, String> nameColumn = new TableColumn<>("Var Name");
+          variable = new Variable("Name", ol , "Values", ol, ol);
+          TableView varTable = new TableView(gradStatsModel.getVarAttributes(variable));
+          
+          TableColumn<Variable, String> nameColumn = new TableColumn<>("Var Name");
+          
           nameColumn.setResizable(false);
           nameColumn.setCellValueFactory(new PropertyValueFactory<>("varName"));
           nameColumn.setPrefWidth(100);     
           nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-            /*labelColumn.setOnEditCommit(
-                    new EventHandler<CellEditEvent<String, String>>() {
-                        @Override
-                        public void handle(CellEditEvent<String, String> t) {
-                            ((String) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                                    ).setValue(t.getNewValue());
-                        }
-                    });*/
-          
+          nameColumn.setOnEditCommit((CellEditEvent<Variable, String> t) -> {
+              ((Variable) t.getTableView().getItems().get(
+                      t.getTablePosition().getRow())
+                      ).setValue(t.getNewValue());
+          });
+//          
           TableColumn<ObservableList, String> typeColumn = new TableColumn<>("Type");
           typeColumn.setResizable(false);
           typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -153,7 +149,7 @@ public class GraduateStats extends Application {
           
           
           
-          TableColumn valsColumn = new TableColumn("Values");
+          TableColumn<Variable, String> valsColumn = new TableColumn("Values");
           valsColumn.setResizable(false);
           valsColumn.setCellValueFactory(new PropertyValueFactory("values"));
           valsColumn.setPrefWidth(100);     
@@ -167,40 +163,50 @@ public class GraduateStats extends Application {
                                     ).setValue(t.getNewValue());
                         }
                     });*/
-          TableColumn measuresColumn = new TableColumn("Measures");  
+                  
+           
+          TableColumn<ObservableList, String> measuresColumn = new TableColumn<>("Measure");  
           measuresColumn.setResizable(false);
-          measuresColumn.setCellValueFactory(new PropertyValueFactory("measures"));
+          measuresColumn.setCellValueFactory(new PropertyValueFactory<>("measures"));
           measuresColumn.setPrefWidth(100);        
-           measuresColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
-            measuresColumn.setOnEditCommit(
-                    new EventHandler<CellEditEvent<ComboBox, String>>() {
-                        @Override
-                        public void handle(CellEditEvent<ComboBox, String> t) {
-                            ((ComboBox) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                                    ).setValue(t.getNewValue());
-                        }
-                    });
-          TableColumn roleColumn = new TableColumn("Role");
-          roleColumn.setResizable(false);
-          roleColumn.setCellValueFactory(new PropertyValueFactory("role"));
-          roleColumn.setPrefWidth(100);        
-          roleColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
-            roleColumn.setOnEditCommit(
-                    new EventHandler<CellEditEvent<ComboBox, String>>() {
-                        @Override
-                        public void handle(CellEditEvent<ComboBox, String> t) {
-                            ((ComboBox) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                                    ).setValue(t.getNewValue());
-                        }
-                    });
+           measuresColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getMeasType()));
+            measuresColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
+                ((Variable) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        ).setValue(t.getNewValue());
+          }); 
+            
+          TableColumn<ObservableList, String> rolesColumn = new TableColumn<>("Role");  
+          rolesColumn.setResizable(false);
+          rolesColumn.setCellValueFactory(new PropertyValueFactory<>("roles"));
+          rolesColumn.setPrefWidth(100);        
+        /*  rolesColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getRoles()));
+          rolesColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
+              ((Variable) t.getTableView().getItems().get(
+                      t.getTablePosition().getRow())
+                      ).setValue(t.getNewValue());
+     
+          });*/
           
-          varTable.getColumns().addAll(nameColumn, typeColumn, valsColumn, measuresColumn, roleColumn );
-          varTable.getSelectionModel().selectedItemProperty()
-                    .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-              Variable selectedVariable = (Variable) newValue;
-              Variable prevSelectedVar = (Variable) oldValue;
+          
+          Clipboard clipboard = Clipboard.getSystemClipboard();
+          
+          varTable.getColumns().addAll(nameColumn, typeColumn, valsColumn, measuresColumn, rolesColumn );
+          varTable.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
+              // this method will be called whenever user selected row
+            @Override
+             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+               Variable selectedUser = (Variable)newValue;
+             ClipboardContent content = new ClipboardContent();
+                 // make sure you override toString in UserClass
+             content.putString(selectedUser.toString());
+             System.out.println("Content contains " + selectedUser);
+             clipboard.setContent(content); 
+             System.out.println("clipboard.getString() returns " + clipboard.getString());
+             
+                     
+                    
+            }
             });
           
               varTable.setMaxSize(1187.0, 500);
@@ -213,12 +219,20 @@ public class GraduateStats extends Application {
                 return varTable;
         
             
-      }
-        /*table.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-            DoubleValue selectedDouble = (DoubleValue) newValue;
-        });*/
+      }        
         
     }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);   
+        
+       
+    }
+
+    
     
     
     

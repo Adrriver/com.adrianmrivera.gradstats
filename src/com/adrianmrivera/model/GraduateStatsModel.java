@@ -28,10 +28,10 @@ public class GraduateStatsModel {
         return attributes;
     }
     
-    final public ObservableList<DoubleValue> getDataValues() {
+    final public ObservableList<ObjectValue> getDataValues() {
         ObservableList dataValues = FXCollections.observableArrayList();
         for(int i = 1; i <=1000; i++){
-            dataValues.add(new DoubleValue((double)i));
+            dataValues.add(new ObjectValue("."));
         }
         
         return dataValues;

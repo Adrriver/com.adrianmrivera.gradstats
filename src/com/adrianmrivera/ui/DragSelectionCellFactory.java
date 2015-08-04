@@ -5,7 +5,7 @@
  */
 package com.adrianmrivera.ui;
 
-import com.adrianmrivera.model.DoubleValue;
+import com.adrianmrivera.model.ObjectValue;
 import com.adrianmrivera.model.Variable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -17,10 +17,10 @@ import javafx.collections.ObservableList;
  */
 
 
-public class DragSelectionCellFactory implements Callback<TableColumn<DoubleValue, String>, TableCell<DoubleValue, String>> {
+public class DragSelectionCellFactory implements Callback<TableColumn<ObjectValue, String>, TableCell<ObjectValue, String>> {
 
         @Override  
-        public TableCell<DoubleValue, String> call(final TableColumn<DoubleValue, String> col) {            
+        public TableCell<ObjectValue, String> call(final TableColumn<ObjectValue, String> col) {            
             return new DragSelection();  
         }  
     

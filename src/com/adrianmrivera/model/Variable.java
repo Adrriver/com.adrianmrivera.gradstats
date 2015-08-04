@@ -19,19 +19,17 @@ import javafx.scene.control.Label;
  */
 public class Variable {
     
-    private SimpleStringProperty varName;
+    private StringProperty varName;
     private ObservableList type;
-    private StringProperty label;
     private StringProperty values;
-    private ComboBox measures;
-    private ComboBox role;
+    private ObservableList measures;
+    private ObservableList roles;
     
-    public Variable(String vName, ObservableList tp, String lbl, String vals,
-            ComboBox msr, ComboBox rl) {
+    public Variable(String vName, ObservableList tp, String vals,
+            ObservableList msr, ObservableList rl) {
         
                 setVarName(vName); 
                 setVarType(tp);
-                setLab(lbl);
                 setValue(vals);
                 setMeasType(msr);
                 setRoles(rl);
@@ -46,86 +44,79 @@ public class Variable {
     public StringProperty varNameProp() {
         
         if( varName == null)
-            varName = new SimpleStringProperty(this, "Name");
+            varName = new SimpleStringProperty("Name");
         
         return varName;
     }
      //type
-    public void setVarType(ObservableList cMenu){
-        setVarTypeList(cMenu);
+    public void setVarType(ObservableList typeList){
+        setVarTypeList(typeList);
     }
     public ObservableList getTypes(){
         return type;
     }
-    public ObservableList setVarTypeList(ObservableList cMenu){
-            cMenu = FXCollections.observableArrayList(
+    public ObservableList setVarTypeList(ObservableList typeList){
+            typeList = FXCollections.observableArrayList(
                 "Numeric",
                 "Currency",
                 "Scientific Notation");
-        
-        
+                
         if( type == null){            
-            type = cMenu;
+            type = typeList;
             }
         return type;
     }
-
     
-    //label
-    public void setLab(String label) {
-        labelProperty().set(label);
-    }
-    public String getLab(){
-        return labelProperty().get();
-    }
-    public StringProperty labelProperty(){
-        if( label == null)
-            label = new SimpleStringProperty(this, "label");
-        return label;
-    }
     
     //value 
-    public void setValue(String name){
-      valuesProp().set(name);  
+    public void setValue(String values){
+      valuesProp().set(values);  
     }
     public String getValues(){
         return valuesProp().get();
     }
     public StringProperty valuesProp() {
         
-        if( values == null)
-            values = new SimpleStringProperty(this, "Name");
-        
-        return values;
-    }
+        if( this.values == null)
+            this.values = new SimpleStringProperty(this, "Values");
+            
+            return values;
     
-     //measure
-    public void setMeasType(Node msr){
-        setMeasureList(msr);
     }
-    public Node getMeasType(){
+     //measure
+    public void setMeasType(ObservableList measList){
+        setMeasureList(measList);
+    }
+    public ObservableList getMeasType(){
         return measures;
     }
-    public Node setMeasureList(Node msr){
+    public ObservableList setMeasureList(ObservableList measLst){
+        measLst = FXCollections.observableArrayList(
+            "Scale",
+                "Ordinal",
+                    "Nominal");
+        
         if( measures == null){
-            ComboBox<Label> msrs = new ComboBox<>();
-            msrs.getItems().addAll(new Label("Ordinal"), new Label("Inverval/Scale"), new Label("Nominal"));
-            measures = msrs;
+            measures = measLst;
         }
         return measures;
     }
     //roles
-    public void setRoles(ComboBox roleBox){
-        setRoleList(roleBox);
+    public void setRoles(ObservableList roleList){
+        setRolesList(roleList);
     }
-   
-    public Node setRoleList(Node roleBox){
-        if( role == null){
-            ComboBox<Label> rb = new ComboBox<>();
-            rb.getItems().addAll(new Label("Input"), new Label("Inverval/Scale"), new Label("Nominal"));
-            role = rb;
+    public ObservableList getRoles(){
+        return roles;
+    }
+    public ObservableList setRolesList(ObservableList roleLst){
+        roleLst = FXCollections.observableArrayList(
+            "Input",
+            "Output");
+        
+        if( roles == null){
+            roles = roleLst;
         }
-        return role;
+        return roles;
     }
 }
 

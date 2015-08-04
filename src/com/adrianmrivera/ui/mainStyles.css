@@ -17,3 +17,12 @@ and open the template in the editor.
 #newFile:active {
     -fx-background-color: #fff1cb;
 }
+#Observations {
+    -fx-font-size: 14;   
+    -fx-font-family: "Calibri";
+    -fx-font-weight: 200;
+}
+#dataTable {
+    -fx-font-size: 14;   
+    -fx-font-family: "Calibri";
+}

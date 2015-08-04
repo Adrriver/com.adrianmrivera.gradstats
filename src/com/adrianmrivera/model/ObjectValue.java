@@ -5,29 +5,31 @@
  */
 package com.adrianmrivera.model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 
 /**
  *
  * @author Adrian_and_Alanna
  */
-public class DoubleValue {
-    private DoubleProperty valueMain;
+public class ObjectValue {
+    private ObjectProperty valueMain;
     
-    public DoubleValue(Double value){
+    public ObjectValue(Object value){
         setValue(value);
     }
     
-    public DoubleProperty valueProperty(){
+    public ObjectProperty valueProperty(){
         if(valueMain == null)
-            valueMain = new SimpleDoubleProperty(0.00);
+            valueMain = new SimpleObjectProperty((Double)0.00);
             
            return valueMain;
     }
     
-    public final void setValue(Double val){
+    public final void setValue(Object val){
         valueProperty().set(val);
+    }
+    public Object getValue(){
+        return valueProperty().get();
     }
 
 }

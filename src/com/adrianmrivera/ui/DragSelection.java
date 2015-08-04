@@ -5,7 +5,7 @@
  */
 package com.adrianmrivera.ui;
 
-import com.adrianmrivera.model.DoubleValue;
+import com.adrianmrivera.model.ObjectValue;
 import javafx.scene.input.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +16,15 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableView.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 /**
  *
  * @author AdrianMRivera
  */
-public class DragSelection extends TableCell<DoubleValue,String> {
+public class DragSelection extends TableCell<ObjectValue,String> {
     
     public DragSelection(){        
         setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -95,16 +95,13 @@ public class DragSelection extends TableCell<DoubleValue,String> {
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
-                    if(t.isAltDown()){                        
-                        commitEdit(textField.getText());
-                            TableRow nextRow = getNextRow();
-                            if(nextRow != null) {
-                                getTableView().edit(getTableRow().getIndex(), nextRow);
-                            }
-                
+                    if(t.isAltDown() == true){
+                        getTableView().requestFocus();
+                        int r = getTableRow().getIndex();
+                        TableColumn currentCol = getNextRow();
+                        getTableView().edit( 1 + (getTableRow().getIndex()), currentCol);
                     }
-                    
-                    commitEdit(textField.getText());                    
+                    commitEdit(textField.getText());                        
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 } else if (t.getCode() == KeyCode.TAB) {
@@ -133,9 +130,9 @@ public class DragSelection extends TableCell<DoubleValue,String> {
      * @param forward true gets the column to the right, false the column to the left of the current column
      * @return
      */
-    private TableColumn<DoubleValue, ?> getNextColumn(boolean forward) {
-        List<TableColumn<DoubleValue, ?>> columns = new ArrayList<>();
-        for (TableColumn<DoubleValue, ?> column : getTableView().getColumns()) {
+    private TableColumn<ObjectValue, ?> getNextColumn(boolean forward) {
+        List<TableColumn<ObjectValue, ?>> columns = new ArrayList<>();
+        for (TableColumn<ObjectValue, ?> column : getTableView().getColumns()) {
             columns.addAll(getLeaves(column));
         }
         //There is no other column that supports editing.
@@ -158,9 +155,9 @@ public class DragSelection extends TableCell<DoubleValue,String> {
         return columns.get(nextIndex);
     }
     
-    private TableRow<DoubleValue> getNextRow() {
-        List<TableColumn<DoubleValue, ?>> columns = new ArrayList<>();
-        for (TableColumn<DoubleValue, ?> column : getTableView().getColumns()) {
+     private TableColumn<ObjectValue, ?> getNextRow() {
+        List<TableColumn<ObjectValue, ?>> columns = new ArrayList<>();
+        for (TableColumn<ObjectValue, ?> column : getTableView().getColumns()) {
             columns.addAll(getLeaves(column));
         }
         //There is no other column that supports editing.
@@ -168,23 +165,13 @@ public class DragSelection extends TableCell<DoubleValue,String> {
             return null;
         }
         int currentIndex = columns.indexOf(getTableColumn());
-        int nextIndex = currentIndex;
-        if (true) {
-            nextIndex++;
-            if (nextIndex > columns.size() - 1) {
-                nextIndex = 0;
-            }
-        } else {
-            nextIndex--;
-            if (nextIndex < 0) {
-                nextIndex = columns.size() - 1;
-            }
-        }
-        return columns.get(nextIndex);
+        
+        return columns.get(currentIndex);
     }
     
-    private List<TableColumn<DoubleValue, ?>> getLeaves(TableColumn<DoubleValue, ?> root) {
-        List<TableColumn<DoubleValue, ?>> columns = new ArrayList<>();
+    
+    private List<TableColumn<ObjectValue, ?>> getLeaves(TableColumn<ObjectValue, ?> root) {
+        List<TableColumn<ObjectValue, ?>> columns = new ArrayList<>();
         if (root.getColumns().isEmpty()) {
             //We only want the leaves that are editable.
             if (root.isEditable()) {
@@ -192,7 +179,7 @@ public class DragSelection extends TableCell<DoubleValue,String> {
             }
             return columns;
         } else {
-            for (TableColumn<DoubleValue, ?> column : root.getColumns()) {
+            for (TableColumn<ObjectValue, ?> column : root.getColumns()) {
                 columns.addAll(getLeaves(column));
             }
             return columns;
