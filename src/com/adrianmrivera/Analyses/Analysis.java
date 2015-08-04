@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Adrian_and_Alanna
  */
-public abstract class Analysis {
+public abstract class Analysis extends Object {
     
     public abstract void getResults();
     

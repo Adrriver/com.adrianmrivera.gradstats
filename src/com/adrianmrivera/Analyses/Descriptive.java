@@ -5,6 +5,7 @@
  */
 package com.adrianmrivera.Analyses;
 
+import com.adrianmrivera.model.DoubleValue;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +14,16 @@ import java.util.ArrayList;
  */
 public abstract class Descriptive extends Analysis {
     
-    private ArrayList<ArrayList<Object>> variables;
+    private int[] nX, nY;    
+    private ArrayList<ArrayList<Object>> independentVars;
+    private ArrayList<ArrayList<Object>> dependentVars;  
+    private ArrayList<ArrayList<Double>> sumOfX;
+    private ArrayList<ArrayList<Double>> sumOfY;
+    private ArrayList<ArrayList<Double>> sumOfSquaredX;
+    private ArrayList<ArrayList<Double>> sumOfSqdDevSc;
+    private ArrayList<ArrayList<Double>> sumOfCrossPrds;
+    private Frequencies frequencies;
+    
+    
     
 }
