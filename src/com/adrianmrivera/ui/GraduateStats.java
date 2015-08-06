@@ -6,7 +6,6 @@
 package com.adrianmrivera.ui;
 
 import com.adrianmrivera.model.*;
-import java.awt.Font;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -36,6 +35,7 @@ public class GraduateStats extends Application {
     final StageStyle style;
     private HashMap<Integer, TableColumn> columns;
     private TableView<ObjectValue> table;
+    private TableView varTable;
     private static boolean dataTabInit, dataTabDone;
     private Variable variable;
             
@@ -100,19 +100,21 @@ public class GraduateStats extends Application {
                         public void handle(CellEditEvent<ObjectValue, String> t) {
                             ((ObjectValue) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
-                                    ).setValue(t.getNewValue());
-                            
+                                    ).setValue(t.getNewValue());                           
+                           
                         }
                     });
             table.getColumns().add(columns.get(i));
             
         }
         
+        
+        
         table.setMaxSize(1187.0, 500);
         table.setMinSize(1187.0, 500);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         table.getSelectionModel().setCellSelectionEnabled(true);        
-        table.setEditable(true);
+        table.setEditable(false);
             dataTabDone = true;
             return table;
             
@@ -121,7 +123,7 @@ public class GraduateStats extends Application {
           
           ObservableList ol = FXCollections.observableArrayList();
           variable = new Variable("Name", ol , "Values", ol, ol);
-          TableView varTable = new TableView(gradStatsModel.getVarAttributes(variable));
+          varTable = new TableView(gradStatsModel.getVarAttributes(variable));
           
           TableColumn<Variable, String> nameColumn = new TableColumn<>("Var Name");
           
@@ -129,11 +131,16 @@ public class GraduateStats extends Application {
           nameColumn.setCellValueFactory(new PropertyValueFactory<>("varName"));
           nameColumn.setPrefWidth(100);     
           nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-          nameColumn.setOnEditCommit((CellEditEvent<Variable, String> t) -> {
-              ((Variable) t.getTableView().getItems().get(
-                      t.getTablePosition().getRow())
-                      ).setValue(t.getNewValue());
+          nameColumn.setOnEditCommit(new EventHandler<CellEditEvent<Variable, String>>() {
+
+              public void handle(CellEditEvent<Variable, String> t) {
+                  ((Variable) t.getTableView().getItems().get(
+                          t.getTablePosition().getRow())
+                          ).setValue(t.getNewValue());
+                  table.getColumns().get((t.getTablePosition().getRow()) + 1).setText(t.getNewValue());
+              }
           });
+          
 //          
           TableColumn<ObservableList, String> typeColumn = new TableColumn<>("Type");
           typeColumn.setResizable(false);
@@ -196,13 +203,13 @@ public class GraduateStats extends Application {
               // this method will be called whenever user selected row
             @Override
              public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-               Variable selectedUser = (Variable)newValue;
-             ClipboardContent content = new ClipboardContent();
-                 // make sure you override toString in UserClass
-             content.putString(selectedUser.toString());
-             System.out.println("Content contains " + selectedUser);
-             clipboard.setContent(content); 
-             System.out.println("clipboard.getString() returns " + clipboard.getString());
+                if( getColInit() == true ){
+                                table.getColumns().get(.getTablePosition().getColumn()).setEditable(true);
+                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-text-fill:#555");
+                            } else {
+                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-background-color:none");
+                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-font-color:#000");
+                            } 
              
                      
                     
@@ -233,7 +240,14 @@ public class GraduateStats extends Application {
     }
 
     
-    
+    public boolean getColInit(){
+        boolean init;
+        
+        init = !((varTable.getColumns().get(0).toString() == "Name") && (varTable.getColumns().get(1).equals(null)) && (varTable.getColumns().get(3).equals(null))
+                    && (varTable.getColumns().get(4).equals(null)));
+                    System.out.println(varTable.getColumns().get(0).toString() + "; " + varTable.getColumns().get(1) + "; " + varTable.getColumns().get(3) + "; " + varTable.getColumns().get(4));
+        return init;
+    }
     
     
 

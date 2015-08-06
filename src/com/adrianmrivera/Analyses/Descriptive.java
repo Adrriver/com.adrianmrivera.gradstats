@@ -5,7 +5,7 @@
  */
 package com.adrianmrivera.Analyses;
 
-import com.adrianmrivera.model.DoubleValue;
+import com.adrianmrivera.model.ObjectValue;
 import java.util.ArrayList;
 
 /**
