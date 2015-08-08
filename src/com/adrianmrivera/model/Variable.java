@@ -19,9 +19,9 @@ import javafx.scene.control.Label;
  */
 public class Variable {
     
-    private StringProperty varName;
+    private SimpleStringProperty varName;
     private ObservableList type;
-    private StringProperty values;
+    private SimpleStringProperty values;
     private ObservableList measures;
     private ObservableList roles;
     
@@ -41,10 +41,10 @@ public class Variable {
     public String getVarName(){
         return varNameProp().get();
     }
-    public StringProperty varNameProp() {
+    public SimpleStringProperty varNameProp() {
         
         if( varName == null)
-            varName = new SimpleStringProperty("Name");
+            varName = new SimpleStringProperty("");
         
         return varName;
     }
@@ -75,12 +75,12 @@ public class Variable {
     public String getValues(){
         return valuesProp().get();
     }
-    public StringProperty valuesProp() {
+    public SimpleStringProperty valuesProp() {
         
         if( this.values == null)
             this.values = new SimpleStringProperty(this, "Values");
             
-            return values;
+        return values;
     
     }
      //measure

@@ -38,7 +38,8 @@ public class GraduateStats extends Application {
     private TableView varTable;
     private static boolean dataTabInit, dataTabDone;
     private Variable variable;
-            
+    boolean toggle = true;
+    private CellEditEvent<Variable, String> varTabRow;
     GraduateStatsModel gradStatsModel = new GraduateStatsModel();
     
     public GraduateStats() {
@@ -92,30 +93,40 @@ public class GraduateStats extends Application {
             columns.put(i, col);
             columns.get(i).setPrefWidth(75);  
             
-            columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain"));
+            columns.get(i).setCellValueFactory(new PropertyValueFactory<>("valueMain" + String.valueOf(i)));
             columns.get(i).setCellFactory(cellFactory);
+            TableColumn tc = columns.get(i);
+            columns.get(i).setOnEditStart(new EventHandler<CellEditEvent<ObjectValue, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<ObjectValue, String> t) {                            
+                            getColInit(t, tc);
+                         
+                        }
+                    });
+            
             columns.get(i).setOnEditCommit(
                     new EventHandler<CellEditEvent<ObjectValue, String>>() {
                         @Override
-                        public void handle(CellEditEvent<ObjectValue, String> t) {
+                        public void handle(CellEditEvent<ObjectValue, String> t) {                            
+                                                        
                             ((ObjectValue) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                                     ).setValue(t.getNewValue());                           
                            
                         }
-                    });
+                    }); 
+            
             table.getColumns().add(columns.get(i));
             
         }
-        
-        
+            
         
         table.setMaxSize(1187.0, 500);
         table.setMinSize(1187.0, 500);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         table.getSelectionModel().setCellSelectionEnabled(true);        
-        table.setEditable(false);
-            dataTabDone = true;
+        table.setEditable(true);
+        dataTabDone = true;
             return table;
             
       // Create variable control tableview
@@ -138,6 +149,7 @@ public class GraduateStats extends Application {
                           t.getTablePosition().getRow())
                           ).setValue(t.getNewValue());
                   table.getColumns().get((t.getTablePosition().getRow()) + 1).setText(t.getNewValue());
+                  varTabRow = t;
               }
           });
           
@@ -177,10 +189,13 @@ public class GraduateStats extends Application {
           measuresColumn.setCellValueFactory(new PropertyValueFactory<>("measures"));
           measuresColumn.setPrefWidth(100);        
            measuresColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getMeasType()));
-            measuresColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
-                ((Variable) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                        ).setValue(t.getNewValue());
+            measuresColumn.setOnEditCommit(new EventHandler<CellEditEvent<ObservableList, String>>() {
+
+              public void handle(CellEditEvent<ObservableList, String> t) {
+                  ((Variable) t.getTableView().getItems().get(
+                          t.getTablePosition().getRow())
+                          ).setValue(t.getNewValue());
+              }
           }); 
             
           TableColumn<ObservableList, String> rolesColumn = new TableColumn<>("Role");  
@@ -200,16 +215,10 @@ public class GraduateStats extends Application {
           
           varTable.getColumns().addAll(nameColumn, typeColumn, valsColumn, measuresColumn, rolesColumn );
           varTable.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
-              // this method will be called whenever user selected row
+              // this method will be called whenever user selects a row
             @Override
              public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if( getColInit() == true ){
-                                table.getColumns().get(.getTablePosition().getColumn()).setEditable(true);
-                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-text-fill:#555");
-                            } else {
-                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-background-color:none");
-                                table.getColumns().get(t.getTablePosition().getColumn()).setStyle("-fx-font-color:#000");
-                            } 
+                
              
                      
                     
@@ -226,7 +235,8 @@ public class GraduateStats extends Application {
                 return varTable;
         
             
-      }        
+      }  
+      
         
     }
     
@@ -240,15 +250,25 @@ public class GraduateStats extends Application {
     }
 
     
-    public boolean getColInit(){
-        boolean init;
-        
-        init = !((varTable.getColumns().get(0).toString() == "Name") && (varTable.getColumns().get(1).equals(null)) && (varTable.getColumns().get(3).equals(null))
-                    && (varTable.getColumns().get(4).equals(null)));
-                    System.out.println(varTable.getColumns().get(0).toString() + "; " + varTable.getColumns().get(1) + "; " + varTable.getColumns().get(3) + "; " + varTable.getColumns().get(4));
-        return init;
-    }
     
+    public void getColInit( CellEditEvent<?, String> t, TableColumn tc ){
+        
+        for(Object tCol : varTable.getColumns()){
+            varTable.getSelectionModel().select(getVarTableRow(), (TableColumn)tCol);
+            Variable colValRef = (Variable) varTable.getItems().get(2);
+            if( colValRef.toString() == null || varTable.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Name")){
+                  System.out.println("It works");
+            } else {
+                System.out.println(colValRef.toString());
+            }
+        }
+    }
+    public int getVarTableRow(){
+        System.out.println(varTabRow.getTableView().getSelectionModel().getFocusedIndex());
+        return varTabRow.getTableView().getSelectionModel().getFocusedIndex();
+        
+        
+    }
     
 
 }
