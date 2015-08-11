@@ -9,9 +9,6 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -23,7 +20,8 @@ public class Variable {
     private ObservableList type;
     private SimpleStringProperty values;
     private ObservableList measures;
-    private ObservableList roles;
+    private ListProperty<ObservableList> roles;
+    private boolean initialized;
     
     public Variable(String vName, ObservableList tp, String vals,
             ObservableList msr, ObservableList rl) {
@@ -50,20 +48,28 @@ public class Variable {
     }
      //type
     public void setVarType(ObservableList typeList){
+        
         setVarTypeList(typeList);
     }
     public ObservableList getTypes(){
         return type;
     }
     public ObservableList setVarTypeList(ObservableList typeList){
-            typeList = FXCollections.observableArrayList(
-                "Numeric",
-                "Currency",
-                "Scientific Notation");
+            
                 
-        if( type == null){            
-            type = typeList;
+        if( type == null && !initialized){   
+            typeList = FXCollections.observableArrayList(
+            "Numeric",
+            "Currency",
+            "Scientific Notation");
+        
+            type = typeList; 
+            System.out.println("Contents of Type: " + type);
+            } else {
+                type = typeList;
             }
+        initialized = true;
+        System.out.println("Contents of Type: " + type);
         return type;
     }
     
@@ -102,21 +108,21 @@ public class Variable {
         return measures;
     }
     //roles
-    public void setRoles(ObservableList roleList){
-        setRolesList(roleList);
+    public void setRoles(ObservableList<ObservableList> roleList){
+        setRolesList().set(roleList);
     }
-    public ObservableList getRoles(){
-        return roles;
+    public ObservableList<ObservableList> getRoles(){
+        return setRolesList().get();
     }
-    public ObservableList setRolesList(ObservableList roleLst){
-        roleLst = FXCollections.observableArrayList(
+    public ListProperty<ObservableList> setRolesList(){
+       if( roles == null ) {   
+            roles = new SimpleListProperty(FXCollections.observableArrayList(
             "Input",
-            "Output");
+            "Output"));
         
-        if( roles == null){
-            roles = roleLst;
-        }
-        return roles;
+       }
+               
+        return this.roles;
     }
 }
 

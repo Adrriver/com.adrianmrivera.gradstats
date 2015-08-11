@@ -91,6 +91,7 @@ public class DragSelection extends TableCell<ObjectValue,String> {
     private void createTextField() {
         textField = new TextField(getString());
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        textField.setPromptText("...");
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {

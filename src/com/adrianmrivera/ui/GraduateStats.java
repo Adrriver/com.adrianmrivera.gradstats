@@ -15,6 +15,12 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.util.*;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,6 +32,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
+import sun.plugin2.jvm.RemoteJVMLauncher.CallBack;
 /**
  *
  * @author Adrian_and_Alanna
@@ -38,6 +45,10 @@ public class GraduateStats extends Application {
     private TableView varTable;
     private static boolean dataTabInit, dataTabDone;
     private Variable variable;
+    private final ObservableList<Role> roleData 
+            = FXCollections.observableArrayList(
+                new Role("Input"),
+                new Role("Output"));
     boolean toggle = true;
     private CellEditEvent<Variable, String> varTabRow;
     GraduateStatsModel gradStatsModel = new GraduateStatsModel();
@@ -62,7 +73,7 @@ public class GraduateStats extends Application {
         scene.setFill(Color.TRANSPARENT);
         
         
-        stage.setScene(scene);
+        stage.setScene(scene);       
         stage.setTitle("Graduate Stats");
         stage.setResizable(false);
         stage.show();
@@ -133,10 +144,12 @@ public class GraduateStats extends Application {
       } else {
           
           ObservableList ol = FXCollections.observableArrayList();
-          variable = new Variable("Name", ol , "Values", ol, ol);
+          variable = new Variable("Name", ol , "Values", ol, null);
           varTable = new TableView(gradStatsModel.getVarAttributes(variable));
+          Callback<TableColumn<Variable, Role>, TableCell<Variable, Role>> comboBoxCellFactory
+                  = (TableColumn<Variable, Role> param) -> new ComboBoxEditingCell();
           
-          TableColumn<Variable, String> nameColumn = new TableColumn<>("Var Name");
+          TableColumn<Variable, String> nameColumn = new TableColumn<>("VarName");
           
           nameColumn.setResizable(false);
           nameColumn.setCellValueFactory(new PropertyValueFactory<>("varName"));
@@ -149,6 +162,7 @@ public class GraduateStats extends Application {
                           t.getTablePosition().getRow())
                           ).setValue(t.getNewValue());
                   table.getColumns().get((t.getTablePosition().getRow()) + 1).setText(t.getNewValue());
+                  variable.setVarName(t.getNewValue());
                   varTabRow = t;
               }
           });
@@ -157,16 +171,24 @@ public class GraduateStats extends Application {
           TableColumn<ObservableList, String> typeColumn = new TableColumn<>("Type");
           typeColumn.setResizable(false);
           typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-          typeColumn.setPrefWidth(100); 
+          typeColumn.setPrefWidth(120); 
           typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getTypes()));
           typeColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
               ((Variable) t.getTableView().getItems().get(
                       t.getTablePosition().getRow())
                       ).setValue(t.getNewValue());
-     
+                      variable.setVarType(FXCollections.observableArrayList(t.getNewValue()));
+                      
           });
           
-          
+          typeColumn.setOnEditCancel(new EventHandler<CellEditEvent<ObservableList, String>>() {
+              
+              @Override
+              public void handle(CellEditEvent<ObservableList, String> t) {                  
+                  variable.setVarType(FXCollections.observableArrayList("null"));
+                  
+              }
+          });
           
           TableColumn<Variable, String> valsColumn = new TableColumn("Values");
           valsColumn.setResizable(false);
@@ -200,15 +222,19 @@ public class GraduateStats extends Application {
             
           TableColumn<ObservableList, String> rolesColumn = new TableColumn<>("Role");  
           rolesColumn.setResizable(false);
-          rolesColumn.setCellValueFactory(new PropertyValueFactory<>("roles"));
+          rolesColumn.setCellValueFactory(cellData -> cellData.getValue().getRolesList());
           rolesColumn.setPrefWidth(100);        
-        /*  rolesColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), variable.getRoles()));
-          rolesColumn.setOnEditCommit((CellEditEvent<ObservableList, String> t) -> {
-              ((Variable) t.getTableView().getItems().get(
-                      t.getTablePosition().getRow())
-                      ).setValue(t.getNewValue());
-     
-          });*/
+          rolesColumn.setCellFactory(ComboBoxTableCell.forTableColumn());  
+          rolesColumn.setOnEditCommit(new EventHandler<CellEditEvent<ObservableList, String>>() {
+
+              public void handle(CellEditEvent<ObservableList, String> t) {
+                  
+                  ((Variable) t.getTableView().getItems().get(
+                          t.getTablePosition().getRow())
+                          ).setValue(t.getNewValue());
+                  //variable.setRoles((FXCollections.observableArrayList(t.getNewValue())));
+              }
+          });
           
           
           Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -249,17 +275,102 @@ public class GraduateStats extends Application {
        
     }
 
+    class ComboBoxEditingCell extends TableCell<Variable, Role> {
+
+        private ComboBox<Role> comboBox;
+
+        private ComboBoxEditingCell() {
+        }
+
+        @Override
+        public void startEdit() {
+            if (!isEmpty()) {
+                super.startEdit();
+                createComboBox();
+                setText(null);
+                setGraphic(comboBox);
+            }
+        }
+
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+
+            setText(getRole().getRole());
+            setGraphic(null);
+        }
+
+        @Override
+        public void updateItem(Role item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (comboBox != null) {
+                        comboBox.setValue(getRole());
+                    }
+                    setText(getRole().getRole());
+                    setGraphic(comboBox);
+                } else {
+                    setText(getRole().getRole());
+                    setGraphic(null);
+                }
+            }
+        }
+
+        private void createComboBox() {
+            comboBox = new ComboBox<>(roleData);
+            comboBoxConverter(comboBox);
+            comboBox.valueProperty().set(getRole());
+            comboBox.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+            comboBox.setOnAction((e) -> {
+                System.out.println("Committed: " + comboBox.getSelectionModel().getSelectedItem());
+                commitEdit(comboBox.getSelectionModel().getSelectedItem());
+            });
+//            comboBox.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+//                if (!newValue) {
+//                    commitEdit(comboBox.getSelectionModel().getSelectedItem());
+//                }
+//            });
+        }
+
+        private void comboBoxConverter(ComboBox<Role> comboBox) {
+            // Define rendering of the list of values in ComboBox drop down. 
+            comboBox.setCellFactory((c) -> {
+                return new ListCell<Role>() {
+                    @Override
+                    protected void updateItem(Role item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.getRole());
+                        }
+                    }
+                };
+            });
+        }
+
+        private Role getRole() {
+            return getItem() == null ? new Role("") : getItem();
+        }
+    }
+
     
     
     public void getColInit( CellEditEvent<?, String> t, TableColumn tc ){
         
         for(Object tCol : varTable.getColumns()){
             varTable.getSelectionModel().select(getVarTableRow(), (TableColumn)tCol);
-            Variable colValRef = (Variable) varTable.getItems().get(2);
+            String colValRef =  variable.getVarName();
             if( colValRef.toString() == null || varTable.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Name")){
                   System.out.println("It works");
             } else {
-                System.out.println(colValRef.toString());
+                System.out.println("Contents of type: " + variable.getTypes().toString());
             }
         }
     }
@@ -270,6 +381,137 @@ public class GraduateStats extends Application {
         
     }
     
+    public static class Role {
+
+        private final SimpleStringProperty role;
+
+        public Role(String role) {
+            this.role = new SimpleStringProperty(role);
+        }
+
+        public String getRole() {
+            return this.role.get();
+        }
+
+        public StringProperty roleProperty() {
+            return this.role;
+        }
+
+        public void setRole(String role) {
+            this.role.set(role);
+        }
+
+        @Override
+        public String toString() {
+            return role.get();
+        }
+
+    }
+    public static class Variable {
+    
+    private SimpleStringProperty varName;
+    private ObservableList type;
+    private SimpleStringProperty values;
+    private ObservableList measures;
+    private final SimpleObjectProperty<Role> roles;
+    private boolean initialized;
+    
+    public Variable(String vName, ObservableList tp, String vals,
+            ObservableList msr, SimpleObjectProperty rl) {
+        
+                setVarName(vName); 
+                setVarType(tp);
+                setValue(vals);
+                setMeasType(msr);
+                this.roles = new SimpleObjectProperty(rl);
+    }
+    //variable name
+    public void setVarName(String name){
+      varNameProp().set(name);  
+    }
+    public String getVarName(){
+        return varNameProp().get();
+    }
+    public SimpleStringProperty varNameProp() {
+        
+        if( varName == null)
+            varName = new SimpleStringProperty("");
+        
+        return varName;
+    }
+     //type
+    public void setVarType(ObservableList typeList){
+        
+        setVarTypeList(typeList);
+    }
+    public ObservableList getTypes(){
+        return type;
+    }
+    public ObservableList setVarTypeList(ObservableList typeList){
+            
+                
+        if( type == null && !initialized){   
+            typeList = FXCollections.observableArrayList(
+            "Numeric",
+            "Currency",
+            "Scientific Notation");
+        
+            type = typeList; 
+            System.out.println("Contents of Type: " + type);
+            } else {
+                type = typeList;
+            }
+        initialized = true;
+        System.out.println("Contents of Type: " + type);
+        return type;
+    }
+    
+    
+    //value 
+    public void setValue(String values){
+      valuesProp().set(values);  
+    }
+    public String getValues(){
+        return valuesProp().get();
+    }
+    public SimpleStringProperty valuesProp() {
+        
+        if( this.values == null)
+            this.values = new SimpleStringProperty(this, "Values");
+            
+        return values;
+    
+    }
+     //measure
+    public void setMeasType(ObservableList measList){
+        setMeasureList(measList);
+    }
+    public ObservableList getMeasType(){
+        return measures;
+    }
+    public ObservableList setMeasureList(ObservableList measLst){
+        measLst = FXCollections.observableArrayList(
+            "Scale",
+                "Ordinal",
+                    "Nominal");
+        
+        if( measures == null){
+            measures = measLst;
+        }
+        return measures;
+    }
+    //roles
+    public void setRoles(Role roleList){
+        setRolesList().set(roleList);
+    }
+    public Role getRoles(){
+        return setRolesList().get();
+    }
+    public ObjectProperty<Role> setRolesList(){
+      
+        return this.roles;
+    }
+}
 
 }
 
