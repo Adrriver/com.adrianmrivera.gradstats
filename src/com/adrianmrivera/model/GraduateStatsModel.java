@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
  */
 public class GraduateStatsModel {      
     
-     final public ObservableList<Variable> getVarAttributes(Variable var) {
+     final public ObservableList<com.adrianmrivera.ui.GraduateStats.Variable> getVarAttributes(com.adrianmrivera.ui.GraduateStats.Variable var) {
         ObservableList attributes = FXCollections.observableArrayList();
         for(int i = 1; i <=1000; i++){
             
